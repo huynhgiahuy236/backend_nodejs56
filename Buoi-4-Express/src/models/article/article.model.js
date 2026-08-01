@@ -63,8 +63,8 @@ const Article = sequelize.define(
     },
   },
   {
-    tableName: "Articles__demo__code_first",
-    // tableName: "Articles",
+    // tableName: "Articles__demo__code_first",
+    tableName: "Articles",
     timestamps: false
     // tắt tính năng tự đông tạo 2 cột createAt và updateAt
   },
@@ -72,7 +72,7 @@ const Article = sequelize.define(
 
 //db-first
 //code-fitst
-await Article.sync()// tạo bảng trong db nếu chưa tồn tại
+// await Article.sync()// tạo bảng trong db nếu chưa tồn tại
 
 
 export default Article;

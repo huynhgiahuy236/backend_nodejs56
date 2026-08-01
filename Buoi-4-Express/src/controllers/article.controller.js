@@ -1,3 +1,4 @@
+import { responseSuccess } from "../common/helpers/response.helper.js";
 import { articleService } from "../services/article.service.js"
 
 export const articleController = {
@@ -6,6 +7,7 @@ export const articleController = {
         const result = await articleService.findAll(req, res)
 
         // tra du lieu ve cho client
-        res.json(result)
+        const respose = responseSuccess("Lấy danh sách bài viết thành công", result)
+        res.json(respose);
     }
 }

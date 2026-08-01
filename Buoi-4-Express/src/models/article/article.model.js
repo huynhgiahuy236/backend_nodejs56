@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../common/sequelize/connect.sequelize.js";
+import sequelize from "../../common/sequelize/connect.sequelize.js";
 
 const Article = sequelize.define(
   "Article", //tên cục bộ sẽ sử dụng trong code/service
@@ -63,10 +63,16 @@ const Article = sequelize.define(
     },
   },
   {
+    // tableName: "Articles__demo__code_first",
     tableName: "Articles",
     timestamps: false
     // tắt tính năng tự đông tạo 2 cột createAt và updateAt
   },
 );
+
+//db-first
+//code-fitst
+await Article.sync()// tạo bảng trong db nếu chưa tồn tại
+
 
 export default Article;

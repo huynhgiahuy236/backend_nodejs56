@@ -3,22 +3,27 @@ import { articleController } from "../../controllers/article.controller.js"
 
 const rootArticle = express.Router()
 
+// READ
 rootArticle.get("/",
     (req, res, next) => {
         if (3 > 2) {
-            res.json({ message: "loi" })
-        } else {
-            const payload = "Thông tin token"
-            req.info = payload
+            console.log("middleware-1")
             next()
+        } else {
+            throw new Error("error")
+            const payload = "Thông tin token được lấy"
+            req.info = payload
+            console.log(req.info)
         }
-        // console.log("middleware-1")
-        // next();
     },
-    (req, res, next) => {
-        console.log("middleware-2")
-        console.log(req.info)
-        next();
-    }, articleController.findAll)
+    articleController.findAll)
 
+//CREATE
+rootArticle.post("", articleController.create)
+
+//UPDATE
+rootArticle.put("/:articleID", articleController.update)
+
+//DELETE
+rootArticle.delete("/:articleID", articleController.delete)
 export default rootArticle

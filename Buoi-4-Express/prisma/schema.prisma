@@ -11,7 +11,7 @@ datasource db {
 model Articles {
   id        Int       @id @default(autoincrement())
   title     String?   @db.VarChar(255)
-  Content   String?   @db.Text
+  content   String?   @db.Text
   imageURL  String?   @db.VarChar(255)
   views     Int       @default(0)
   userId    Int?

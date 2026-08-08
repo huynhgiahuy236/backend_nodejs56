@@ -8,8 +8,8 @@ export const articleController = {
         const result = await articleService.findAll(req, res)
 
         // tra du lieu ve cho client
-        const respose = responseSuccess("Lấy danh sách bài viết thành công", result)
-        res.json(respose);
+        const response = responseSuccess("Lấy danh sách bài viết thành công", result)
+        res.status(response.statusCode).json(response)
     },
     async create(req, res) {
         const result = await articleService.create(req);

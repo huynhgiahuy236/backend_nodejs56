@@ -9,10 +9,30 @@ export const articleService = {
         // sequelize
         // return "list-article"
         // const resultSequelize = await articleModel.findAll();
-        let { page, pageSize } = req.query
+        let { page, pageSize, filters } = req.query
+        // console.log(filters)
+
+        try {
+            filters = JSON.parse(filters)
+        } catch (error) {
+            filters = {};
+        }
+        
+        Object.entries(filters).forEach(([key, value]) => {
+            if (typeof value == "string") {
+                filters[key] = {
+                    contains: value,
+                }
+            }
+        })
+        const where = {
+            isDeleted: false,
+            ...filters
+        }
         const pageDefault = 1
         const pageSizeDefault = 3
-        console.log(page, pageSize)
+
+        // console.log(page, pageSize)
         page = Number(page)
         pageSize = Number(pageSize)
 
@@ -25,25 +45,20 @@ export const articleService = {
 
         const index = (page - 1) * pageSize;
         const resultPrisma = await prisma.articles.findMany({
-            where: {
-                isDeleted: false
-            },
+            where: where,
             skip: index, //offset
             take: pageSize,// Limit
         })
         const totalItems = await prisma.articles.count({
-            where: {
-                isDeleted: false
-            }
+            where: where
         })
         const totalPage = Math.ceil(totalItems / pageSize);
         return {
+            items: resultPrisma,
             totalItems: totalItems,
             totalPage: totalPage,
             page: page,
             pageSize: pageSize,
-            item: resultPrisma,
-            
         }
     },
     async create(req) {

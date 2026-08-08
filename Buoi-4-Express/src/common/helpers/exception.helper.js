@@ -1,6 +1,6 @@
 import { statusCodes } from "./statusCode.helper.js";
 //400
-class BadRequestException extends Error {
+export class BadRequestException extends Error {
   code = statusCodes.BAD_REQUEST;
   name = "BadRequestException";
   constructor(message = "Bad request") {
@@ -9,7 +9,7 @@ class BadRequestException extends Error {
 }
 
 //401
-class UnauthorizedException extends Error {
+export class UnauthorizedException extends Error {
   code = statusCodes.UNAUTHORIZED;
   name = "UnauthorizedException";
   constructor(message = "Unauthorized") {
@@ -18,7 +18,7 @@ class UnauthorizedException extends Error {
 }
 
 //403
-class ForbiddenException extends Error {
+export class ForbiddenException extends Error {
   code = statusCodes.FORBIDDEN;
   name = "ForbiddenException";
   constructor(message = "Forbidden") {
@@ -27,7 +27,7 @@ class ForbiddenException extends Error {
 }
 
 //404
-class NotFoundException extends Error {
+export class NotFoundException extends Error {
   code = statusCodes.NOT_FOUND;
   name = "NotFoundException";
   constructor(message = "Not found") {

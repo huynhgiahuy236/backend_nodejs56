@@ -2,6 +2,7 @@ import { where } from "sequelize";
 import { prisma } from "../common/prisma/connect.prisma.js";
 // import sequelize from "../common/sequelize/connect.sequelize.js"
 import articleModel from "../models/article/article.model.js"
+import { buildQueryPrisma } from "../common/helpers/build-query-prisma.helper.js";
 
 //4 nơi nhận dữ liệu từ FE: body, header, query, params
 export const articleService = {
@@ -9,41 +10,8 @@ export const articleService = {
         // sequelize
         // return "list-article"
         // const resultSequelize = await articleModel.findAll();
-        let { page, pageSize, filters } = req.query
-        // console.log(filters)
-
-        try {
-            filters = JSON.parse(filters)
-        } catch (error) {
-            filters = {};
-        }
+        const { where, page, pageSize, index } = buildQueryPrisma(req)
         
-        Object.entries(filters).forEach(([key, value]) => {
-            if (typeof value == "string") {
-                filters[key] = {
-                    contains: value,
-                }
-            }
-        })
-        const where = {
-            isDeleted: false,
-            ...filters
-        }
-        const pageDefault = 1
-        const pageSizeDefault = 3
-
-        // console.log(page, pageSize)
-        page = Number(page)
-        pageSize = Number(pageSize)
-
-        //nếu gửi chữ 
-        page = Number(page) || pageDefault
-        pageSize = Number(pageSize) || pageSizeDefault
-        // nếu gửi số âm
-        if (page < 1) page = pageDefault;
-        if (pageSize < 1) pageSize = pageSizeDefault
-
-        const index = (page - 1) * pageSize;
         const resultPrisma = await prisma.articles.findMany({
             where: where,
             skip: index, //offset

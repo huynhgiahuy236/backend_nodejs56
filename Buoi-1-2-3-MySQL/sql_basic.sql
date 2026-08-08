@@ -22,9 +22,10 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 -- Đổi tên bảng
 RENAME TABLE `user` TO 	`Users`
-
+RENAME TABLE `Users` TO `user`
 -- Xóa cột 
 ALTER TABLE `Users` DROP COLUMN `age`
+ALTER TABLE 
 
 -- Thêm cột
 ALTER TABLE `Users` ADD COLUMN `googleID` VARCHAR(255)
@@ -50,7 +51,8 @@ INSERT INTO `Users` (`username`, `email`) VALUE
 ('Nguyễn Văn C', 'nguyenvanc@gmail.com'),
 ('Nguyễn Văn D', 'nguyenvand@gmail.com'),
 ('Nguyễn Văn E', 'nguyenvane@gmail.com')
-
+INSERT INTO `Users` (`age`) VALUE
+(10)
 
 
 INSERT INTO `Foods` (`name`, `description`) VALUES
@@ -94,6 +96,7 @@ CREATE TABLE IF NOT EXISTS `Users`(
 	`avatar` TEXT,
 	`age` INT,
 	`user_type_id` INT,
+	FOREIGN KEY(`user_type_id`) REFERENCES `user_type`(`id`)
 	FOREIGN KEY(`user_type_id`) REFERENCES `user_type`(`id`)
 )
  INSERT INTO `user_type` (`name`) VALUES
@@ -182,9 +185,11 @@ INNER JOIN `Users` u ON o.user_id = u.id
 GROUP BY `user_id`
 
 -- buoc 3: thống kê số lượng nhom dc
-SELECT COUNT(o.`id`), o.`user_id`, u.`username` FROM orders o 
-INNER JOIN `Users` u ON o.user_id = u.id 
-GROUP BY `user_id`
+SELECT COUNT(u.`id`), o.user_id ,u.username 
+from orders o 
+INNER JOIN Users u ON o.user_id = u.id
+GROUP BY user_id
+LIMIT 1
 
 -- buoc4: thong ke so luong mua hang bang GROUP BY (DESC(giam dan), ACS(TANG DAN)) - LIMIT (GIOI HAN DONG)
 SELECT COUNT(o.`id`) AS `SO_LAN_MUA_HANG`, o.`user_id`, u.`username` FROM orders o 

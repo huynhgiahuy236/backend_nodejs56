@@ -1,10 +1,10 @@
 import express from "express"
 import { articleController } from "../../controllers/article.controller.js"
 
-const rootArticle = express.Router()
+const articleRouter = express.Router()
 
 // READ
-rootArticle.get("/",
+articleRouter.get("/",
     (req, res, next) => {
         if (3 > 2) {
             console.log("middleware-1")
@@ -19,11 +19,11 @@ rootArticle.get("/",
     articleController.findAll)
 
 //CREATE
-rootArticle.post("", articleController.create)
+articleRouter.post("", articleController.create)
 
 //UPDATE
-rootArticle.put("/:articleID", articleController.update)
+articleRouter.put("/:articleID", articleController.update)
 
 //DELETE
-rootArticle.delete("/:articleID", articleController.delete)
-export default rootArticle
+articleRouter.delete("/:articleID", articleController.delete)
+export default articleRouter

@@ -9,7 +9,6 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Articles.ts'
-export type * from './models/Articles__demo__code_first.ts'
 export type * from './models/ChatGroupMembers.ts'
 export type * from './models/ChatGroups.ts'
 export type * from './models/ChatMessages.ts'

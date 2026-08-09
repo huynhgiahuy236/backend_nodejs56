@@ -4,6 +4,7 @@ import { appError } from "./src/common/helpers/appError.helper.js";
 import { json } from "sequelize";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { logAPI } from "./src/common/middlewares/log-api.middleware.js";
 // commonjs --es5  
 // const app = require("express")
 // module -- es6
@@ -22,6 +23,9 @@ app.use(cors({
 
 // middleware deered parse cookie từ client gửi lên server
 app.use(cookieParser())
+
+// logAPI
+app.use(logAPI())
 
 
 app.use(express.json())

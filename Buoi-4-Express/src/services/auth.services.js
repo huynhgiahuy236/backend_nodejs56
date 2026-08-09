@@ -44,6 +44,9 @@ export const authService = {
         const userExit = await prisma.users.findUnique({
             where: {
                 email: email
+            },
+            omit: {
+                password: false
             }
         })
         // chưa -> yêu cầu đăng kí
@@ -62,7 +65,8 @@ export const authService = {
         return { accessToken: accessToken, refreshToken: refreshToken }
     },
     async getInfo(req) {
-        return "info";
+        const user = req.user
+        return user
     }
 
 };

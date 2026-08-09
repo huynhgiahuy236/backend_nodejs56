@@ -52,7 +52,6 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Articles: 'Articles',
-  Articles__demo__code_first: 'Articles__demo__code_first',
   ChatGroupMembers: 'ChatGroupMembers',
   ChatGroups: 'ChatGroups',
   ChatMessages: 'ChatMessages',
@@ -80,23 +79,6 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const ArticlesScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  content: 'content',
-  imageURL: 'imageURL',
-  views: 'views',
-  userId: 'userId',
-  deletedBy: 'deletedBy',
-  isDeleted: 'isDeleted',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ArticlesScalarFieldEnum = (typeof ArticlesScalarFieldEnum)[keyof typeof ArticlesScalarFieldEnum]
-
-
-export const Articles__demo__code_firstScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
   Content: 'Content',
   imageURL: 'imageURL',
   views: 'views',
@@ -108,7 +90,7 @@ export const Articles__demo__code_firstScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type Articles__demo__code_firstScalarFieldEnum = (typeof Articles__demo__code_firstScalarFieldEnum)[keyof typeof Articles__demo__code_firstScalarFieldEnum]
+export type ArticlesScalarFieldEnum = (typeof ArticlesScalarFieldEnum)[keyof typeof ArticlesScalarFieldEnum]
 
 
 export const ChatGroupMembersScalarFieldEnum = {
@@ -219,20 +201,11 @@ export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 export const ArticlesOrderByRelevanceFieldEnum = {
   title: 'title',
-  content: 'content',
-  imageURL: 'imageURL'
-} as const
-
-export type ArticlesOrderByRelevanceFieldEnum = (typeof ArticlesOrderByRelevanceFieldEnum)[keyof typeof ArticlesOrderByRelevanceFieldEnum]
-
-
-export const Articles__demo__code_firstOrderByRelevanceFieldEnum = {
-  title: 'title',
   Content: 'Content',
   imageURL: 'imageURL'
 } as const
 
-export type Articles__demo__code_firstOrderByRelevanceFieldEnum = (typeof Articles__demo__code_firstOrderByRelevanceFieldEnum)[keyof typeof Articles__demo__code_firstOrderByRelevanceFieldEnum]
+export type ArticlesOrderByRelevanceFieldEnum = (typeof ArticlesOrderByRelevanceFieldEnum)[keyof typeof ArticlesOrderByRelevanceFieldEnum]
 
 
 export const ChatGroupsOrderByRelevanceFieldEnum = {

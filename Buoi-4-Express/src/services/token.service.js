@@ -1,6 +1,6 @@
 import { ACCESS_TOKEN_SECRET_KEY } from "../common/constants/app.constant.js"
 import { BadRequestException } from "../common/helpers/exception.helper.js"
-import jwt, { verify } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 
 export const tokenService = {
     createAccessToken(userId) {

@@ -398,7 +398,6 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   Articles: 'Articles',
-  Articles__demo__code_first: 'Articles__demo__code_first',
   ChatGroupMembers: 'ChatGroupMembers',
   ChatGroups: 'ChatGroups',
   ChatMessages: 'ChatMessages',
@@ -420,7 +419,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "articles" | "articles__demo__code_first" | "chatGroupMembers" | "chatGroups" | "chatMessages" | "foods" | "orders" | "users"
+    modelProps: "articles" | "chatGroupMembers" | "chatGroups" | "chatMessages" | "foods" | "orders" | "users"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -487,72 +486,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ArticlesCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ArticlesCountAggregateOutputType> | number
-        }
-      }
-    }
-    Articles__demo__code_first: {
-      payload: Prisma.$Articles__demo__code_firstPayload<ExtArgs>
-      fields: Prisma.Articles__demo__code_firstFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.Articles__demo__code_firstFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Articles__demo__code_firstPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.Articles__demo__code_firstFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Articles__demo__code_firstPayload>
-        }
-        findFirst: {
-          args: Prisma.Articles__demo__code_firstFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Articles__demo__code_firstPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.Articles__demo__code_firstFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Articles__demo__code_firstPayload>
-        }
-        findMany: {
-          args: Prisma.Articles__demo__code_firstFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Articles__demo__code_firstPayload>[]
-        }
-        create: {
-          args: Prisma.Articles__demo__code_firstCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Articles__demo__code_firstPayload>
-        }
-        createMany: {
-          args: Prisma.Articles__demo__code_firstCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        delete: {
-          args: Prisma.Articles__demo__code_firstDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Articles__demo__code_firstPayload>
-        }
-        update: {
-          args: Prisma.Articles__demo__code_firstUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Articles__demo__code_firstPayload>
-        }
-        deleteMany: {
-          args: Prisma.Articles__demo__code_firstDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.Articles__demo__code_firstUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        upsert: {
-          args: Prisma.Articles__demo__code_firstUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Articles__demo__code_firstPayload>
-        }
-        aggregate: {
-          args: Prisma.Articles__demo__code_firstAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateArticles__demo__code_first>
-        }
-        groupBy: {
-          args: Prisma.Articles__demo__code_firstGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Articles__demo__code_firstGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.Articles__demo__code_firstCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Articles__demo__code_firstCountAggregateOutputType> | number
         }
       }
     }
@@ -994,23 +927,6 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const ArticlesScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  content: 'content',
-  imageURL: 'imageURL',
-  views: 'views',
-  userId: 'userId',
-  deletedBy: 'deletedBy',
-  isDeleted: 'isDeleted',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ArticlesScalarFieldEnum = (typeof ArticlesScalarFieldEnum)[keyof typeof ArticlesScalarFieldEnum]
-
-
-export const Articles__demo__code_firstScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
   Content: 'Content',
   imageURL: 'imageURL',
   views: 'views',
@@ -1022,7 +938,7 @@ export const Articles__demo__code_firstScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type Articles__demo__code_firstScalarFieldEnum = (typeof Articles__demo__code_firstScalarFieldEnum)[keyof typeof Articles__demo__code_firstScalarFieldEnum]
+export type ArticlesScalarFieldEnum = (typeof ArticlesScalarFieldEnum)[keyof typeof ArticlesScalarFieldEnum]
 
 
 export const ChatGroupMembersScalarFieldEnum = {
@@ -1133,20 +1049,11 @@ export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 export const ArticlesOrderByRelevanceFieldEnum = {
   title: 'title',
-  content: 'content',
-  imageURL: 'imageURL'
-} as const
-
-export type ArticlesOrderByRelevanceFieldEnum = (typeof ArticlesOrderByRelevanceFieldEnum)[keyof typeof ArticlesOrderByRelevanceFieldEnum]
-
-
-export const Articles__demo__code_firstOrderByRelevanceFieldEnum = {
-  title: 'title',
   Content: 'Content',
   imageURL: 'imageURL'
 } as const
 
-export type Articles__demo__code_firstOrderByRelevanceFieldEnum = (typeof Articles__demo__code_firstOrderByRelevanceFieldEnum)[keyof typeof Articles__demo__code_firstOrderByRelevanceFieldEnum]
+export type ArticlesOrderByRelevanceFieldEnum = (typeof ArticlesOrderByRelevanceFieldEnum)[keyof typeof ArticlesOrderByRelevanceFieldEnum]
 
 
 export const ChatGroupsOrderByRelevanceFieldEnum = {
@@ -1375,7 +1282,6 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
   articles?: Prisma.ArticlesOmit
-  articles__demo__code_first?: Prisma.Articles__demo__code_firstOmit
   chatGroupMembers?: Prisma.ChatGroupMembersOmit
   chatGroups?: Prisma.ChatGroupsOmit
   chatMessages?: Prisma.ChatMessagesOmit

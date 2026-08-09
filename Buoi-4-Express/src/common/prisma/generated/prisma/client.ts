@@ -45,11 +45,6 @@ export { Prisma }
  */
 export type Articles = Prisma.ArticlesModel
 /**
- * Model Articles__demo__code_first
- * 
- */
-export type Articles__demo__code_first = Prisma.Articles__demo__code_firstModel
-/**
  * Model ChatGroupMembers
  * 
  */

@@ -1,6 +1,7 @@
 import { BadRequestException } from "../common/helpers/exception.helper.js";
 import { prisma } from "../common/prisma/connect.prisma.js";
 import bcrypt from "bcrypt"
+import { tokenService } from "./token.service.js";
 
 export const authService = {
     async register(req) {
@@ -50,11 +51,12 @@ export const authService = {
             throw new BadRequestException("Tài khoản chưa được đăng ký");
         }
         // đã đăng ký -> xử lý đăng nhập
-        const isPassWordValid = bcrypt.compareSync(password,userExit.password)  // boolean
-        if(!isPassWordValid){
-             throw new BadRequestException("Thông tin tài khoản không chính xác");
+        const isPassWordValid = bcrypt.compareSync(password, userExit.password)  // boolean
+        if (!isPassWordValid) {
+            throw new BadRequestException("Thông tin tài khoản không chính xác");
         }
-        return `This action returns all login`;
+        const accessToken = tokenService.createAccessToken(userExit.id)
+        return { accessToken: accessToken }
     },
 
 };

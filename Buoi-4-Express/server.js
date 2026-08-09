@@ -3,6 +3,7 @@ import rootRouter from "./src/routers/root.router.js";
 import { appError } from "./src/common/helpers/appError.helper.js";
 import { json } from "sequelize";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 // commonjs --es5  
 // const app = require("express")
 // module -- es6
@@ -18,6 +19,9 @@ const app = express()
 app.use(cors({
     origin: "http://localhost:3000"
 }))
+
+// middleware deered parse cookie từ client gửi lên server
+app.use(cookieParser())
 
 
 app.use(express.json())

@@ -15,10 +15,23 @@ export const authController = {
    async login(req, res, next) {
       try {
          const result = await authService.login(req);
-         const response = responseSuccess(result, `Get all modules successfully`);
+         const response = responseSuccess(true, `Get all modules successfully`);
+
+         res.cookie("accessToken", result.accessToken)
+         res.cookie("refreshToken", result.refreshToken)
+
          res.status(response.statusCode).json(response);
+
       } catch (err) {
          next(err);
       }
    },
+   async getInfo(req, res, next) {
+      try {
+         const result = await authService.getInfo(req)
+         const response = responseSuccess("getInfo success")
+      } catch (error) {
+         next(error)
+      }
+   }
 };

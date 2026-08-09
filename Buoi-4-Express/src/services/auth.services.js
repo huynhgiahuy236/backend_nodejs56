@@ -56,7 +56,13 @@ export const authService = {
             throw new BadRequestException("Thông tin tài khoản không chính xác");
         }
         const accessToken = tokenService.createAccessToken(userExit.id)
-        return { accessToken: accessToken }
+        // refreshToken dùng để làm mới do hết hạn lưu ở hai chỗ Localstore hoặc Cookies  
+        const refreshToken = "";
+
+        return { accessToken: accessToken, refreshToken: refreshToken }
     },
+    async getInfo(req) {
+        return "info";
+    }
 
 };

@@ -17,6 +17,8 @@ export const protect = async (req, res, next) => {
     if (!userExits) {
         throw new BadRequestException("Người dùng không tồn tại")
     }
+    console.log(userExits)
     req.user = userExits
+    console.log(req.user)
     next()
 }

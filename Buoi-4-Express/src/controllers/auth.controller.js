@@ -29,7 +29,8 @@ export const authController = {
    async getInfo(req, res, next) {
       try {
          const result = await authService.getInfo(req)
-         const response = responseSuccess("getInfo success")
+         const response = responseSuccess(result, "getInfo success")
+         res.status(response.statusCode).json(response);
       } catch (error) {
          next(error)
       }

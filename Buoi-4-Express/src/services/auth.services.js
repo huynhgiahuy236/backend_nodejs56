@@ -2,9 +2,11 @@ import { BadRequestException } from "../common/helpers/exception.helper.js";
 import { prisma } from "../common/prisma/connect.prisma.js";
 import bcrypt from "bcrypt"
 import { tokenService } from "./token.service.js";
+import { use } from "react";
 
 export const authService = {
     async register(req) {
+        const { email, password, fullName } = req.body
 
         //bcrypt - hashpassword, khong the dich nguoc lai
         // chi co the so sanh
@@ -12,7 +14,6 @@ export const authService = {
         const hashPassword = bcrypt.hashSync(password, 10)
 
 
-        const { email, password, fullName } = req.body
         console.log(email, password, fullName)
         // kiem tra email da duoc dang ki chua
         const userExit = await prisma.users.findUnique({
@@ -38,8 +39,8 @@ export const authService = {
         return true;
     },
     async login(req) {
-        const { body } = req.body
-        console.log(body)
+        const { email, password } = req.body
+        console.log(email)
         // kiểm tra đăng ký chưa 
         const userExit = await prisma.users.findUnique({
             where: {
@@ -65,7 +66,8 @@ export const authService = {
         return { accessToken: accessToken, refreshToken: refreshToken }
     },
     async getInfo(req) {
-        const user = req.user
+        const user = await req.user
+        console.log(user)
         return user
     }
 

@@ -13,6 +13,7 @@ export const tokenService = {
         return accessToken;
     },
     verifyAccessToken(accessToken,option ) {
-        jwt.verify(accessToken, ACCESS_TOKEN_SECRET_KEY, option)
+       const decode = jwt.verify(accessToken, ACCESS_TOKEN_SECRET_KEY, option)
+       return decode
     }
 }

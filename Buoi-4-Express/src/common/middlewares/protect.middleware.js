@@ -1,3 +1,4 @@
+import { tokenService } from "../../services/token.service.js"
 import { BadRequestException } from "../helpers/exception.helper.js"
 
 export const protect = (req, res, next) => {
@@ -6,7 +7,6 @@ export const protect = (req, res, next) => {
         throw new BadRequestException("Không có AccessToken")
     }
     // verify accessToken
-    
-
+    const decode = tokenService.verifyAccessToken(accessToken);
     next()
 }

@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize";
 
 
 // tao ket noi den database
-const sequelize = new Sequelize('mysql://root:123456@localhost:3307/nodeJs_56')
+const sequelize = new Sequelize('mysql://root:12345@localhost:3307/nodejs_56')
 // kiem tra ket noi
 try {
     await sequelize.authenticate();

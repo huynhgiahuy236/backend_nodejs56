@@ -22,7 +22,7 @@ export const authService = {
         console.log(userExit)
         // neu roi -> tu choi
         if (userExit) {
-            throw new BadRequestException("Email đã được đăng ký");
+            throw new BadRequestException("Tài khoản đã được đăng ký");
         }
 
         // neu chua dang ky -> tao moi user
@@ -47,11 +47,13 @@ export const authService = {
         })
         // chưa -> yêu cầu đăng kí
         if (!userExit) {
-            throw new BadRequestException("Email chưa được đăng ký");
+            throw new BadRequestException("Tài khoản chưa được đăng ký");
         }
         // đã đăng ký -> xử lý đăng nhập
-        const isPassWordValid = bcrypt.compareSync(password,userExit.password) 
-        
+        const isPassWordValid = bcrypt.compareSync(password,userExit.password)  // boolean
+        if(!isPassWordValid){
+             throw new BadRequestException("Thông tin tài khoản không chính xác");
+        }
         return `This action returns all login`;
     },
 

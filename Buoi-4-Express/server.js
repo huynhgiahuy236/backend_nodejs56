@@ -5,6 +5,9 @@ import { json } from "sequelize";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { logAPI } from "./src/common/middlewares/log-api.middleware.js";
+import { TooManyRequestsException } from "./src/common/helpers/exception.helper.js";
+import { appLimit } from "./src/common/middlewares/rateLimit.middleware.js";
+import { initLoginGooglePassport } from "./src/common/passport/login-google.passport.js";
 // commonjs --es5  
 // const app = require("express")
 // module -- es6
@@ -26,11 +29,11 @@ app.use(cookieParser())
 
 // logAPI
 app.use(logAPI())
-
+initLoginGooglePassport()// khởi tạo passport login gg
 
 app.use(express.json())
 // url: localhost:3069/api/list-article
-app.use("/api", rootRouter)
+app.use("/api", appLimit, rootRouter)
 app.use(appError)
 
 

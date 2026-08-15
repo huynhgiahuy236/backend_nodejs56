@@ -34,3 +34,11 @@ export class NotFoundException extends Error {
     super(message);
   }
 }
+429//
+export class TooManyRequestsException extends Error {
+  code = statusCodes.TOO_MANY_REQUESTS
+  name = "TooManyRequestsException"
+  constructor(message = "TooManyRequestsException") {
+    super(message)
+  }
+}

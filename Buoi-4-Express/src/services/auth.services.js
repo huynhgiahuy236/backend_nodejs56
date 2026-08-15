@@ -14,14 +14,14 @@ export const authService = {
         const hashPassword = bcrypt.hashSync(password, 10)
 
 
-        console.log(email, password, fullName)
+        // console.log(email, password, fullName)
         // kiem tra email da duoc dang ki chua
         const userExit = await prisma.users.findUnique({
             where: {
                 email: email
             }
         })
-        console.log(userExit)
+        // console.log(userExit)
         // neu roi -> tu choi
         if (userExit) {
             throw new BadRequestException("Tài khoản đã được đăng ký");
@@ -40,7 +40,7 @@ export const authService = {
     },
     async login(req) {
         const { email, password } = req.body
-        console.log(email)
+        // console.log(email)
         // kiểm tra đăng ký chưa 
         const userExit = await prisma.users.findUnique({
             where: {
@@ -67,7 +67,7 @@ export const authService = {
     },
     async getInfo(req) {
         const user = await req.user
-        console.log(user)
+        // console.log(user)
         return user
     }
 

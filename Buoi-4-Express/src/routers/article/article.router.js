@@ -13,7 +13,7 @@ articleRouter.get("/",
             throw new Error("error")
             const payload = "Thông tin token được lấy"
             req.info = payload
-            console.log(req.info)
+            // console.log(req.info)
         }
     },
     articleController.findAll)

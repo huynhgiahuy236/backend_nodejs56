@@ -8,7 +8,7 @@ export const tokenService = {
             throw new BadRequestException("không có userID để tạo accessToken")
         }
         const accessToken = jwt.sign(
-            { userId: userId }, ACCESS_TOKEN_SECRET_KEY, { expiresIn: "10s" }
+            { userId: userId }, ACCESS_TOKEN_SECRET_KEY, { expiresIn: "60s" }
         )
         return accessToken;
     },

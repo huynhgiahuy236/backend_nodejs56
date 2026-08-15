@@ -1,4 +1,4 @@
-import { BadRequestException } from "../common/helpers/exception.helper.js";
+import { BadRequestException, UnauthorizedException } from "../common/helpers/exception.helper.js";
 import { prisma } from "../common/prisma/connect.prisma.js";
 import bcrypt from "bcrypt"
 import { tokenService } from "./token.service.js";
@@ -61,7 +61,7 @@ export const authService = {
         }
         const accessToken = tokenService.createAccessToken(userExit.id)
         // refreshToken dùng để làm mới do hết hạn lưu ở hai chỗ Localstore hoặc Cookies  
-        const refreshToken = "";
+        const refreshToken = tokenService.createRefreshToken(userExit.id);
 
         return { accessToken: accessToken, refreshToken: refreshToken }
     },
@@ -69,6 +69,43 @@ export const authService = {
         const user = await req.user
         // console.log(user)
         return user
+    },
+    async refreshToken(req) {
+        //thời hạn refreshtoken là 1 ngày
+
+        //nếu trả về 1 cặp token mới
+        //refreshToken sẽ luôn được làm mới, login của người dùng sẽ luôn duy trì
+        //nếu trong 1 ngày người dùng k sử dụng -> logout
+
+        // chỉ trả về accesstoken mới
+        //sau khi refreshtoken hết hạn, người dùng sẽ phải đăng nhập lại
+        const { accessToken, refreshToken } = req.cookies
+        if (!accessToken || !refreshToken) {
+            throw new BadRequestException("Vui long dang nhap de tiep tuc")
+        }
+        const decodeAccessToken = tokenService.verifyAccessToken(accessToken, {
+            ignoreExpiration: true
+        })
+        const decodeRefreshToken = tokenService.verifyRefreshToken(refreshToken)
+
+        if (decodeAccessToken.userId !== decodeRefreshToken.userId) {
+            throw new UnauthorizedException("Token khong hop le")
+        }
+        const userExit = prisma.users.findUnique({
+            where:{
+                id: decodeAccessToken.userId
+            }
+        })
+        if(!userExit){
+            throw new UnauthorizedException("Nguoi dung khong ton tai")
+        }
+
+        const newAccesToken = tokenService.createAccessToken(userExit.id)
+        
+        return {
+            accessToken: newAccesToken,
+            refreshToken: refreshToken
+        }
     }
 
 };

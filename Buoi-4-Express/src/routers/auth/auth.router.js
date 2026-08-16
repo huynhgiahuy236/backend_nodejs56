@@ -14,6 +14,15 @@ authRouter.get("/get-info", protect, authController.getInfo)
 authRouter.post("/refresh-token", authController.refreshToken)
 // khi user click vao login gg - api login gg se dc kich hoat
 // passport kich hoat va redirect user toi trang chon tai khoan gg, dong thoi gui scope ma minh da yeu cau
-authRouter.get("/google",passport.authenticate("google",{scope:["profile","email"]}))
 // authRouter.get("/get-info", protectv2, authController.getInfo)
+
+
+// auth-google
+authRouter.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }))
+authRouter.get("/google/callback", passport.authenticate("google", { failureRedirect: "/login", session: false }), function (req, res) {
+    // nếu xác minh thông tin hộp lệ, thì đi vào đây
+    console.log("mid tiếp theo sau khi verify", req.user)
+    // res.redirect("/")
+})
+
 export default authRouter;

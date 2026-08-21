@@ -48,6 +48,12 @@ export const authController = {
       } catch (error) {
          next(error)
       }
+   },
+   async googleCallback(req, res) {
+      res.cookie("accessToken", req.user.accessToken)
+      res.cookie("refreshToken", req.user.refreshToken)
+
+      res.redirect("http://localhost:3000/login-callback")
    }
 
 };

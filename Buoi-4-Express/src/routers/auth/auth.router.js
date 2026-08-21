@@ -19,10 +19,12 @@ authRouter.post("/refresh-token", authController.refreshToken)
 
 // auth-google
 authRouter.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }))
-authRouter.get("/google/callback", passport.authenticate("google", { failureRedirect: "/login", session: false }), function (req, res) {
-    // nếu xác minh thông tin hộp lệ, thì đi vào đây
-    console.log("mid tiếp theo sau khi verify", req.user)
-    // res.redirect("/")
-})
+authRouter.get("/google/callback", passport.authenticate("google", { failureRedirect: "/login", session: false }),
+    // function (req, res) {
+    //     // nếu xác minh thông tin hộp lệ, thì đi vào đây
+    //     console.log("mid tiếp theo sau khi verify", req.user)
+    //     // res.redirect("/")} 
+    authController.googleCallback
+)
 
 export default authRouter;

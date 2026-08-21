@@ -36,6 +36,10 @@ app.use(express.json())
 app.use("/api", appLimit, rootRouter)
 app.use(appError)
 
+// middleware để cho phép FE truy cập vào các file tĩnh trong thư mục gốc của project 
+// app.use(express.static("."))
+app.use(express.static("public"))
+
 
 const PORT = 3069
 app.listen(PORT, () => {

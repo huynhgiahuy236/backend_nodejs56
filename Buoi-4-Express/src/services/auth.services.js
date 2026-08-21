@@ -91,7 +91,7 @@ export const authService = {
         if (decodeAccessToken.userId !== decodeRefreshToken.userId) {
             throw new UnauthorizedException("Token khong hop le")
         }
-        const userExit = prisma.users.findUnique({
+        const userExit = await prisma.users.findUnique({
             where:{
                 id: decodeAccessToken.userId
             }

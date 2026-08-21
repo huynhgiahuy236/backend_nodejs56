@@ -1,13 +1,14 @@
 import express from "express"
 import { articleController } from "../../controllers/article.controller.js"
+import { protect } from "../../common/middlewares/protect.middleware.js"
 
 const articleRouter = express.Router()
 
 // READ
-articleRouter.get("/",
+articleRouter.get("/", protect,
     (req, res, next) => {
         if (3 > 2) {
-            console.log("middleware-1")
+            // console.log("middleware-1")
             next()
         } else {
             throw new Error("error")

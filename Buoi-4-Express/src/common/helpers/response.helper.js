@@ -4,7 +4,7 @@ export const responseSuccess = ( result,messageText = "Lấy danh sách thành c
     return {
         status: "success",
         statusCode: statusCode,
-        massage: messageText,
+        message: messageText,
         doc: "swagger.com",
         data: result,
     }

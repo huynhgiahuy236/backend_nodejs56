@@ -7,8 +7,8 @@ import {
 import { prisma } from "../prisma/connect.prisma.js";
 import { tokenService } from "../../services/token.service.js";
 
-export const initLoginGooglePassport =  () => { 
-    passport.use( 
+export const initLoginGooglePassport = () => {
+    passport.use(
         new GoogleStrategy(
             {
                 clientID: GOOGLE_CLIENT_ID,
@@ -24,9 +24,9 @@ export const initLoginGooglePassport =  () => {
                 const fullName = profile.displayName;
                 const googleId = profile.id;
                 const email = profile.emails[0].value;
-                const avartar = profile.photos[0].value;
+                const avatar = profile.photos[0].value;
                 const isEmailVerified = profile.emails[0].verified;
-                console.log({ fullName, googleId, email, avartar, isEmailVerified });
+                // console.log({ fullName, googleId, email, avatar, isEmailVerified });
 
                 if (!isEmailVerified) {
                     return cb(new Error("Email chưa verify"), null)
@@ -42,7 +42,7 @@ export const initLoginGooglePassport =  () => {
                             fullName: fullName,
                             googleId: googleId,
                             email: email,
-                            avartar: avartar,
+                            avatar: avatar,
                         }
                     })
                 }

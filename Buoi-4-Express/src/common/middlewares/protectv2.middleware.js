@@ -7,7 +7,7 @@ export const protectv2 = async (req, res, next) => {
     // dinh dang cua authen tren header: Bearer <accessToken>
     // buoc 1: lay token ra tu header
     const authHeader = req.headers.authorization
-    console.log(authHeader)
+    // console.log(authHeader)
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         throw new UnauthorizedException("Vui long dang nhap de tiep tuc")
@@ -15,7 +15,7 @@ export const protectv2 = async (req, res, next) => {
 
     // buoc 2: lay accessToken ra tu header
     const accessToken = authHeader.split(' ')[1]
-    console.log(accessToken)
+    // console.log(accessToken)
     // buoc3: kiem tra accessToken
     const decode = tokenService.verifyAccessToken(accessToken)
     if (!decode) {

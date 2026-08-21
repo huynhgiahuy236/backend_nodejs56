@@ -1,6 +1,6 @@
 import { ACCESS_TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY } from "../common/constants/app.constant.js"
 import { BadRequestException } from "../common/helpers/exception.helper.js"
-import jwt  from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 
 export const tokenService = {
     createAccessToken(userId) {
@@ -8,7 +8,7 @@ export const tokenService = {
             throw new BadRequestException("không có userID để tạo accessToken")
         }
         const accessToken = jwt.sign(
-            { userId: userId }, ACCESS_TOKEN_SECRET_KEY, { expiresIn: "60s" }
+            { userId: userId }, ACCESS_TOKEN_SECRET_KEY, { expiresIn: "1h" }
         )
         return accessToken;
     },

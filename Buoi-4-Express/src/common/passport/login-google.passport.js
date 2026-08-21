@@ -7,15 +7,15 @@ import {
 import { prisma } from "../prisma/connect.prisma.js";
 import { tokenService } from "../../services/token.service.js";
 
-export const initLoginGooglePassport = () => {
-    passport.use(
+export const initLoginGooglePassport =  () => { 
+    passport.use( 
         new GoogleStrategy(
             {
                 clientID: GOOGLE_CLIENT_ID,
                 clientSecret: GOOGLE_CLIENT_SECRET,
                 callbackURL: "http://localhost:3069/api/auth/google/callback",
             },
-            function (accessTokenGG, refreshTokenGG, profile, cb) {
+            async function (accessTokenGG, refreshTokenGG, profile, cb) {
                 // console.dir(
                 //   { accessToken, refreshToken, profile },
                 //   { depth: null, color: true },
@@ -31,13 +31,13 @@ export const initLoginGooglePassport = () => {
                 if (!isEmailVerified) {
                     return cb(new Error("Email chưa verify"), null)
                 }
-                let userExit = prisma.users.findFirst({
+                let userExit = await prisma.users.findFirst({
                     where: {
                         email: email
                     }
                 })
                 if (!userExit) {
-                    userExit = prisma.users.create({
+                    userExit = await prisma.users.create({
                         data: {
                             fullName: fullName,
                             googleId: googleId,

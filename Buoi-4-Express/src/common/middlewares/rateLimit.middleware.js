@@ -15,7 +15,7 @@ export const appLimit = rateLimit({
 // dang nhap 5 lan trong 10 phut tren 1 ip
 export const limitLogin = rateLimit({
     windowMs: 15 * 6 * 1000,
-    max: 20,
+    max: 40,
     standardHeaders: "draft-8",
     legacyHeaders: false,
     handler: () => {

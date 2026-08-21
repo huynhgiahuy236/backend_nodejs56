@@ -2,13 +2,13 @@ import { userService } from "../services/user.service.js";
 import { responseSuccess } from "../common/helpers/response.helper.js";
 export const userController = {
     async avatarLocal(req, res, next) {
-        const result = await userService.create(req);
+        const result = await userService.avatarLocal(req);
         const response = responseSuccess(result, `Create user successfully`);
         res.status(response.statusCode).json(response);
     },
 
     async avatarCloud(req, res, next) {
-        const result = await userService.findAll(req);
+        const result = await userService.avatarCloud(req);
         const response = responseSuccess(result, `Get all users successfully`);
         res.status(response.statusCode).json(response);
     }

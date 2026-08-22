@@ -11,7 +11,7 @@ export const articleService = {
         // return "list-article"
         // const resultSequelize = await articleModel.findAll();
         const { where, page, pageSize, index } = buildQueryPrisma(req)
-        
+
         const resultPrisma = await prisma.articles.findMany({
             where: where,
             skip: index, //offset
@@ -72,7 +72,14 @@ export const articleService = {
             }
 
         }); return true
-    }
+    },
+    async findOne(req) {
+        // const body = req.body
+        const { articleID } = req.params;
+        const result = await prisma.articles.findUnique({
+            where: { id: Number(articleID) },
+        }); return result
+    },
 
 }
 

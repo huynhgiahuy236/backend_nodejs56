@@ -27,4 +27,8 @@ articleRouter.put("/:articleID", articleController.update)
 
 //DELETE
 articleRouter.delete("/:articleID", articleController.delete)
+
+// Find one
+articleRouter.get("/:articleID", articleController.findOne)
+
 export default articleRouter

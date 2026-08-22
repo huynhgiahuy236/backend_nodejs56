@@ -101,23 +101,23 @@ export const article = {
         },
         delete: {
             tags: ["Article"],
-            summary: "Returns a list of articles.",
+            summary: "Deletes a single article by ID.",
             description: "Optional extended description in CommonMark or HTML.",
             parameters: [
                 {
                     in: "path",
-                    name: "id", // ứng với {id}
+                    name: "id",
                     schema: {
                         type: "integer",
                         example: 1,
                         default: 1,
                     },
-                }
+                },
             ],
             responses: {
                 200: {
                     description: "ok",
-                }
+                },
             },
         },
     },

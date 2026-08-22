@@ -55,7 +55,7 @@ export const articleService = {
         return true;
     },
     async delete(req) {
-        const body = req.body
+        // const body = req.body
         const { articleID } = req.params;
         // console.log({ body })
         // Cách 1: không áp dụng delete thật trong db để xóa trực tiếp trên table do không có khả năng khôi phục
@@ -67,8 +67,8 @@ export const articleService = {
             where: { id: Number(articleID) },
             data: {
                 isDeleted: true,
-                deleteAt: new Date(),
-                deleteBy: 1
+                deletedAt: new Date(),
+                deletedBy: 1
             }
 
         }); return true

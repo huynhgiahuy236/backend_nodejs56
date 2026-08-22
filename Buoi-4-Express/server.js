@@ -10,6 +10,10 @@ import { initLoginGooglePassport } from "./src/common/passport/login-google.pass
 import swaggerUi from "swagger-ui-express"
 import { swaggerDocument } from "./src/common/swagger/init.swagger.js";
 
+import { createServer } from "http"
+import { Server } from "socket.io"
+import { Socket } from "dgram";
+
 // commonjs --es5  
 // const app = require("express")
 // module -- es6
@@ -46,8 +50,15 @@ app.use(express.static("public"))
 //swagger ui express
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+
+const httpServer = createServer(app)
+const io = new Server(httpServer, {
+})
+io.on("connection", (socket) => {
+    console.log("socket-id", socket.id)
+})
 const PORT = 3069
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
     console.log(`server online at localhost ${PORT}`)
 })
 

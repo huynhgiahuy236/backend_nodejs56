@@ -45,16 +45,16 @@ export const swaggerDocument = {
                 "responses": {
                     "200": {
                         "description": "A JSON array of user names",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
+                        // "content": {
+                        //     "application/json": {
+                        //         "schema": {
+                        //             "type": "array",
+                        //             "items": {
+                        //                 "type": "string"
+                        //             }
+                        //         }
+                        //     }
+                        // }
                     }
                 }
             }

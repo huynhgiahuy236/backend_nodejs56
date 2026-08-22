@@ -7,12 +7,12 @@ export const swaggerDocument = {
     },
     "servers": [
         {
-            "url": "http://huynhgiahuy.com/api",
-            "description": "Optional server description, e.g. Main (production) server"
-        },
-        {
             "url": "http://locahost:3069/api",
             "description": "Optional server description, e.g. Internal staging server for testing"
+        },
+        {
+            "url": "http://huynhgiahuy.com/api",
+            "description": "Optional server description, e.g. Main (production) server"
         }
     ],
     "paths": {
@@ -40,7 +40,30 @@ export const swaggerDocument = {
     }, "paths": {
         "/article": {
             "get": {
+                tags: ["article"],
                 "summary": "Returns a list of users.",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "schema": {
+                            type: "integer",
+                            example: 1,
+                            default: 1,
+                        },
+                        "description": "The number of items to skip before starting to collect the result set"
+                    },
+                    {
+                        "in": "query",
+                        "name": "pageSize",
+                        "schema": {
+                            type: "integer",
+                            example: 3,
+                            default: 3,
+                        },
+                        "description": "The numbers of items to return"
+                    }
+                ],
                 "description": "Optional extended description in CommonMark or HTML.",
                 "responses": {
                     "200": {
@@ -55,6 +78,12 @@ export const swaggerDocument = {
                         //         }
                         //     }
                         // }
+                    },
+                    "400": {
+                        "description": "400"
+                    },
+                    401: {
+                        "description": "Unauthorized"
                     }
                 }
             }

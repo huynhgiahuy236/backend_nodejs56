@@ -1,13 +1,15 @@
 import express from "express";
 import rootRouter from "./src/routers/root.router.js";
 import { appError } from "./src/common/helpers/appError.helper.js";
-import { json } from "sequelize";
+// import { json } from "sequelize";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { logAPI } from "./src/common/middlewares/log-api.middleware.js";
-import { TooManyRequestsException } from "./src/common/helpers/exception.helper.js";
 import { appLimit } from "./src/common/middlewares/rateLimit.middleware.js";
 import { initLoginGooglePassport } from "./src/common/passport/login-google.passport.js";
+import swaggerUi from "swagger-ui-express"
+import { swaggerDocument } from "./src/common/swagger/init.swagger.js";
+
 // commonjs --es5  
 // const app = require("express")
 // module -- es6
@@ -40,6 +42,9 @@ app.use(appError)
 // app.use(express.static("."))
 app.use(express.static("public"))
 
+
+//swagger ui express
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const PORT = 3069
 app.listen(PORT, () => {

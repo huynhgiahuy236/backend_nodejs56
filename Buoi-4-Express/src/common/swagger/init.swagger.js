@@ -1,4 +1,5 @@
 import { article } from "./article.swagger.js";
+import { auth } from "./auth.swagger.js";
 
 export const swaggerDocument = {
     "openapi": "3.0.4",
@@ -39,9 +40,10 @@ export const swaggerDocument = {
                 }
             }
         }
-    }, 
-    "paths": {
-    ...article
     },
+    "paths": {
+        ...article,
+        ...auth
+    }
 
 }

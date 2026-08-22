@@ -42,7 +42,7 @@ export const articleService = {
         return true;
     },
     async update(req) {
-        // const body = req.body 
+        const body = req.body
         const { articleID } = req.params;
         const result = await prisma.articles.update({
             where: { id: Number(articleID) },
@@ -55,7 +55,7 @@ export const articleService = {
         return true;
     },
     async delete(req) {
-        // const body = req.body
+        const body = req.body
         const { articleID } = req.params;
         // console.log({ body })
         // Cách 1: không áp dụng delete thật trong db để xóa trực tiếp trên table do không có khả năng khôi phục

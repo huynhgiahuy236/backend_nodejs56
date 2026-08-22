@@ -63,7 +63,7 @@ export const articleService = {
         //     where: { id: Number(articleID) }
         // })
         // Cách 2 nên dùng
-        await prisma.articles.delete({
+        await prisma.articles.update({
             where: { id: Number(articleID) },
             data: {
                 isDeleted: true,

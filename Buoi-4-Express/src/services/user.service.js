@@ -3,6 +3,7 @@ import { prisma } from "../common/prisma/connect.prisma.js";
 import path from "path"
 import fs from "fs"
 import { v2 as cloudinary } from "cloudinary"
+import { buildQueryPrisma } from "../common/helpers/build-query-prisma.helper.js";
 cloudinary.config({
    secure: false
 })
@@ -34,7 +35,6 @@ export const userService = {
       // })
       return `image/${req.file.filename}`;
    },
-
    async avatarCloud(req) {
       if (!req.file) {
          throw new BadRequestException("Vui long chọn file để upload")
@@ -74,5 +74,32 @@ export const userService = {
       //    "req.user": req.user
       // })
       return uploadResult.secure_url;
-   }
-};
+   },
+   async findAll(req) {
+      const { where, page, pageSize, index } = buildQueryPrisma(req)
+
+      const resultPrisma = await prisma.users.findMany({
+         where: where,
+         skip: index, //offset
+         take: pageSize,// Limit
+      })
+      const totalItems = await prisma.users.count({
+         where: where
+      })
+      const totalPage = Math.ceil(totalItems / pageSize);
+      return {
+         items: resultPrisma,
+         totalItems: totalItems,
+         totalPage: totalPage,
+         page: page,
+         pageSize: pageSize,
+      }
+   },
+   async findOne(req) {
+      // const body = req.body
+      const { userID } = req.params;
+      const result = await prisma.users.findUnique({
+         where: { id: Number(userID) },
+      }); return result
+   },
+}

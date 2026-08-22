@@ -12,4 +12,6 @@ const userRouter = express.Router();
 userRouter.post('/avatar-local', protect, uploadDiskStorage.single("avatar"), userController.avatarLocal);
 userRouter.post('/avatar-cloud', protect, uploadMemoryStorage.single("avatar"), userController.avatarCloud);
 
+userRouter.get("/", userController.findAll)
+userRouter.get("/:userID", userController.findOne)
 export default userRouter;

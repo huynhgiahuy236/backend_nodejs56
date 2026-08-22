@@ -9,10 +9,11 @@ import { appLimit } from "./src/common/middlewares/rateLimit.middleware.js";
 import { initLoginGooglePassport } from "./src/common/passport/login-google.passport.js";
 import swaggerUi from "swagger-ui-express"
 import { swaggerDocument } from "./src/common/swagger/init.swagger.js";
+import { initSocket } from "./src/common/socket/init.socket.js";
 
-import { createServer } from "http"
-import { Server } from "socket.io"
-import { Socket } from "dgram";
+// import { createServer } from "http"
+// import { Server } from "socket.io"
+// import { Socket } from "dgram";
 
 // commonjs --es5  
 // const app = require("express")
@@ -50,13 +51,8 @@ app.use(express.static("public"))
 //swagger ui express
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+const httpServer = initSocket(app)
 
-const httpServer = createServer(app)
-const io = new Server(httpServer, {
-})
-io.on("connection", (socket) => {
-    console.log("socket-id", socket.id)
-})
 const PORT = 3069
 httpServer.listen(PORT, () => {
     console.log(`server online at localhost ${PORT}`)

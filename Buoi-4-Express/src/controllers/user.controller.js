@@ -10,7 +10,7 @@ export const userController = {
     async avatarCloud(req, res, next) {
         const result = await userService.avatarCloud(req);
         const response = responseSuccess(result, `Get all users successfully`);
-        res.status(response.statusCode).json(response);
+        res.status(response.statusCode).json(response)
     },
     async findAll(req, res, next) {
         const result = await userService.findAll(req);

@@ -18,7 +18,7 @@ export const initSocket = (app) => {
             const { userId } = tokenService.verifyAccessToken(accessToken);
             const userExits = await prisma.users.findUnique({
                 where: {
-                    id: userId,
+                    id: userId
                 },
             });
             // targetUserIds = [2, 2, 3, 3, 4];

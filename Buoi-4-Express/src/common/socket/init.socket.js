@@ -97,8 +97,7 @@ export const initSocket = (app) => {
                         status: "success",
                         message: "Tạo group chat thành công",
                         data: {
-                            userId: userExits.id,
-                            name: name
+                            chatGroupId: chatGroup.id
                         }
                     })
                     // console.log("CREATE_ROOM", {

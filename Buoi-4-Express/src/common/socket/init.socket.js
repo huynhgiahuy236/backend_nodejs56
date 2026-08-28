@@ -40,7 +40,7 @@ export const initSocket = (app) => {
                     userExits,
                 });
             } catch (error) {
-                cb({ error, data: null, message: error.message ||"Lỗi không xác định"})
+                cb({ error, data: null, message: error.message || "Lỗi không xác định" })
             }
         });
     });

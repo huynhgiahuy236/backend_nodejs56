@@ -66,6 +66,15 @@ export const initSocket = (app) => {
                         })
                     }
                     //3.Nếu có rồi -> đi tiếp (kết nối tới room chat)
+                    socket.join(chatGroup.id)
+                    cb({
+                        status: "seccess",
+                        message: "Tạo phòng thành công",
+                        data: {
+                            chatGroupId: chatGroup.id
+                        }
+                    })
+                    console.log(io.sockets.adapter.rooms)
                     console.log("CREATE_ROOM", {
                         targetUserIDUnique,
                         accessToken,

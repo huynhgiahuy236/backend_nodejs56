@@ -69,7 +69,7 @@ export const initSocket = (app) => {
                         })
                     }
                     //3.Nếu có rồi -> đi tiếp (kết nối tới room chat)
-                    socket.join(chatGroup.id)
+                    socket.join(`chat:${chatGroup.id}`)
                     cb({
                         status: "success",
                         message: "Tạo phòng thành công",
@@ -95,7 +95,7 @@ export const initSocket = (app) => {
                             }
                         })
                     })
-                    socket.join(chatGroup.id)
+                    socket.join(`chat:${chatGroup.id}`)
                     cb({
                         status: "success",
                         message: "Tạo group chat thành công",
@@ -132,13 +132,44 @@ export const initSocket = (app) => {
             if (!chatGroupId) {
                 throw new Error("chatGroup không tồn tại")
             }
-            socket.join(chatGroupId)
+            socket.join(`chat:${chatGroupId}`)
             cb({
                 status: "success",
                 message: "Tham gia room chat thành công",
                 data: {
                     chatGroupId: chatGroupId
                 }
+            })
+        })
+
+        //gui tin nhan
+        socket.on("SEND_MESSAGE", async (data, cb) => {
+            const { chatGroupId, accessToken, message } = data
+            const { userId } = tokenService.verifyAccessToken(accessToken)
+            const userExits = await prisma.users.findUnique({
+                where: {
+                    id: userId
+                }
+            })
+            if (!userExits) {
+                throw new Error("User khong ton tai")
+            }
+            const createdAt = new Date().toISOString();
+            // luu vao database
+            await prisma.chatMessages.create({
+                data: {
+                    chatGroupId,
+                    userIdSender: userId,
+                    messageText: message,
+                    createdAt: createdAt
+                }
+            })
+            // gui thong tin nguoi nhan
+            io.to(`chat:${chatGroupId}`).emit("SEND_MESSAGE", {
+                chatGroupId,
+                userIdSender: userId,
+                messageText: message,
+                createdAt: createdAt
             })
         })
 

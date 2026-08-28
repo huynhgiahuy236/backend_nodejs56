@@ -30,7 +30,7 @@ export const initSocket = (app) => {
                 if (targetUserIDUnique.length === 2) {
                     //tạo room chat 1-1
                     //1.kiểm tra groupChat đã tồn tại hay chưa
-                    prisma.chatGroups.findFirst({
+                    const chatGroup = await prisma.chatGroups.findFirst({
                         where: {
                             ChatGroupMembers: {
                                 // kiểm tra bản ghi
@@ -38,14 +38,22 @@ export const initSocket = (app) => {
                                 // some: chỉ cần ít nhất 1 bảng ghi trong db thỏa mãn điều kiện này 
                                 // none: không có bản ghi nào thỏa mãn điều kiện này
                                 every: {
-                                    userId: targetUserIDUnique,
+                                    userId: {
+                                        in: targetUserIDUnique
+                                    }
+
                                 }
                             }
                         }
                     })
-
-
                     //2.Nếu chưa tạo mới
+                    if (!chatGroup) {
+                        prisma.chatGroups.create({
+                            data: {
+                                ownerId: userExits.id,
+                            }
+                        })
+                    }
                     //3.Nếu có rồi -> đi tiếp (kết nối tới room chat)
                 } else {
                     //tạo room chat nhóm

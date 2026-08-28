@@ -13,7 +13,13 @@ export const chatGroupService = {
         const { where, page, pageSize, index } = buildQueryPrisma(req)
 
         const resultPrisma = await prisma.chatGroups.findMany({
-            where: where,
+            where: {
+                ChatGroupMembers:{
+                    some:{
+                        userId: req.user.id
+                    }
+                }
+            },
             skip: index, //offset
             take: pageSize,// Limit
             include: {

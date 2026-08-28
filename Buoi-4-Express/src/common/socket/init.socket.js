@@ -2,6 +2,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import { tokenService } from "../../services/token.service.js";
 import { prisma } from "../prisma/connect.prisma.js";
+import { BadRequestException } from "../helpers/exception.helper.js";
 
 export const initSocket = (app) => {
     const httpServer = createServer(app);
@@ -11,7 +12,9 @@ export const initSocket = (app) => {
 
     io.on("connection", (socket) => {
         console.log("socket-id", socket.id);
-
+        //dùng khi chưa có chatGroup
+        // trạng thái ban đầu,
+        // hỗ trợ tạo mới
         socket.on("CREATE_ROOM", async (data, cb) => {
             try {
                 let { targetUserIds, accessToken, name } = data;
@@ -113,6 +116,24 @@ export const initSocket = (app) => {
                 cb({ status: "error", data: null, message: error.message || "Lỗi không xác định" })
             }
         });
+        // khi đã có chatGroup
+        // user click một chatGroup bất kỳ (1 box chat)
+        socket.on("JOIN_ROOM", async (data, cb) => {
+            const { chatGroupId, accessToken } = data
+            const { userId } = tokenService.verifyAccessToken(accessToken)
+            const userExits = await prisma.users.findUnique({
+                where: {
+                    id: userId
+                }
+            })
+            if(!userExits){
+                throw new Error("User không tồn tại");
+            }
+            if(!chatGroupId){
+                throw new Error("chatGroup không tồn tại")
+            }
+        })
+
     });
 
     return httpServer;

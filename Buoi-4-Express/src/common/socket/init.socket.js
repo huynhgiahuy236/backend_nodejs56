@@ -126,12 +126,20 @@ export const initSocket = (app) => {
                     id: userId
                 }
             })
-            if(!userExits){
+            if (!userExits) {
                 throw new Error("User không tồn tại");
             }
-            if(!chatGroupId){
+            if (!chatGroupId) {
                 throw new Error("chatGroup không tồn tại")
             }
+            socket.join(chatGroupId)
+            cb({
+                status: "success",
+                message: "Tham gia room chat thành công",
+                data: {
+                    chatGroupId: chatGroupId
+                }
+            })
         })
 
     });

@@ -48,10 +48,21 @@ export const initSocket = (app) => {
                     })
                     //2.Nếu chưa tạo mới
                     if (!chatGroup) {
-                        prisma.chatGroups.create({
+                        chatGroup = await prisma.chatGroups.create({
                             data: {
                                 ownerId: userExits.id,
                             }
+                        })
+                        await prisma.chatGroupMembers.createMany({
+                            data: [
+                                {
+                                    userId: targetUserIDUnique[0], chatGroupId: chatGroup.id
+                                },
+                                {
+                                    userId: targetUserIDUnique[1], chatGroupId: chatGroup.id
+                                }
+
+                            ]
                         })
                     }
                     //3.Nếu có rồi -> đi tiếp (kết nối tới room chat)

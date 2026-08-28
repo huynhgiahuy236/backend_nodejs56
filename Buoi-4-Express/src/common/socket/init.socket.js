@@ -13,31 +13,35 @@ export const initSocket = (app) => {
         console.log("socket-id", socket.id);
 
         socket.on("CREATE_ROOM", async (data, cb) => {
-            let { targetUserIds, accessToken } = data;
-            //kiểm trả thông tin userId
-            const { userId } = tokenService.verifyAccessToken(accessToken);
-            const userExits = await prisma.users.findUnique({
-                where: {
-                    id: userId
-                },
-            });
-            // targetUserIds = [2, 2, 3, 3, 4];
-            // loại bỏ các user trùng nhau
-            const targetUserIDUniqueSet = new Set([...targetUserIds, userId]);
-            const targetUserIDUnique = Array.from(targetUserIDUniqueSet);
+            try {
+                let { targetUserIds, accessToken } = data;
+                //kiểm trả thông tin userId
+                const { userId } = tokenService.verifyAccessToken(accessToken);
+                const userExits = await prisma.users.findUnique({
+                    where: {
+                        id: userId
+                    },
+                });
+                // targetUserIds = [2, 2, 3, 3, 4];
+                // loại bỏ các user trùng nhau
+                const targetUserIDUniqueSet = new Set([...targetUserIds, userId]);
+                const targetUserIDUnique = Array.from(targetUserIDUniqueSet);
 
-            if (targetUserIDUnique.length === 2) {
-                //tạo room chat 1-1
-            } else {
-                //tạo room chat nhóm
+                if (targetUserIDUnique.length === 2) {
+                    //tạo room chat 1-1
+                } else {
+                    //tạo room chat nhóm
+                }
+
+                console.log("CREATE_ROOM", {
+                    targetUserIDUnique,
+                    accessToken,
+                    userId,
+                    userExits,
+                });
+            } catch (error) {
+                cb({ error, data: null, message: error.message ||"Lỗi không xác định"})
             }
-
-            console.log("CREATE_ROOM", {
-                targetUserIDUnique,
-                accessToken,
-                userId,
-                userExits,
-            });
         });
     });
 

@@ -35,7 +35,7 @@ export const initSocket = (app) => {
                             ChatGroupMembers: {
                                 // kiểm tra bản ghi
                                 // every: tất cả bảng trong db đều phải thỏa mãn điều kiện này
-                                // some: 1 trong hai bảng ghi trong db thỏa mãn điều kiện này 
+                                // some: chỉ cần ít nhất 1 bảng ghi trong db thỏa mãn điều kiện này 
                                 // none: không có bản ghi nào thỏa mãn điều kiện này
                                 every: {
                                     userId: targetUserIDUnique,

@@ -146,6 +146,7 @@ export const initSocket = (app) => {
         socket.on("SEND_MESSAGE", async (data, cb) => {
             const { chatGroupId, accessToken, message } = data
             const { userId } = tokenService.verifyAccessToken(accessToken)
+            // luu thong tin nguoi dung vao cache -> redis/be để hạn chế quẻy vào db
             const userExits = await prisma.users.findUnique({
                 where: {
                     id: userId
@@ -155,6 +156,13 @@ export const initSocket = (app) => {
                 throw new Error("User khong ton tai")
             }
             const createdAt = new Date().toISOString();
+            // gui thong tin nguoi nhan
+            io.to(`chat:${chatGroupId}`).emit("SEND_MESSAGE", {
+                chatGroupId,
+                userIdSender: userId,
+                messageText: message,
+                createdAt: createdAt
+            })
             // luu vao database
             await prisma.chatMessages.create({
                 data: {
@@ -164,13 +172,7 @@ export const initSocket = (app) => {
                     createdAt: createdAt
                 }
             })
-            // gui thong tin nguoi nhan
-            io.to(`chat:${chatGroupId}`).emit("SEND_MESSAGE", {
-                chatGroupId,
-                userIdSender: userId,
-                messageText: message,
-                createdAt: createdAt
-            })
+
         })
 
     });

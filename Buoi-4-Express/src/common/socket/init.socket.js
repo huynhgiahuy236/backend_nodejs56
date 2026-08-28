@@ -14,7 +14,7 @@ export const initSocket = (app) => {
 
         socket.on("CREATE_ROOM", async (data, cb) => {
             try {
-                let { targetUserIds, accessToken } = data;
+                let { targetUserIds, accessToken, name } = data;
                 //kiểm trả thông tin userId
                 const { userId } = tokenService.verifyAccessToken(accessToken);
                 const userExits = await prisma.users.findUnique({
@@ -68,26 +68,48 @@ export const initSocket = (app) => {
                     //3.Nếu có rồi -> đi tiếp (kết nối tới room chat)
                     socket.join(chatGroup.id)
                     cb({
-                        status: "seccess",
+                        status: "success",
                         message: "Tạo phòng thành công",
                         data: {
                             chatGroupId: chatGroup.id
                         }
                     })
-                    console.log(io.sockets.adapter.rooms)
-                    console.log("CREATE_ROOM", {
-                        targetUserIDUnique,
-                        accessToken,
-                        userId,
-                        userExits,
-                        chatGroup
-                    });
+                    // console.log(io.sockets.adapter.rooms)
+
                 } else {
-                    //tạo room chat nhóm
-
+                    // tạo room chat nhóm
+                    const chatGroup = await prisma.chatGroups.create({
+                        data: {
+                            ownerId: userExits.id,
+                            name: name
+                        }
+                    })
+                    await prisma.chatGroupMembers.createMany({
+                        data: targetUserIDUnique.map((userId) => {
+                            return {
+                                userId: userId,
+                                chatGroupId: chatGroup.id
+                            }
+                        })
+                    })
+                    socket.join(chatGroup.id)
+                    cb({
+                        status: "success",
+                        message: "Tạo group chat thành công",
+                        data: {
+                            userId: userExits.id,
+                            name: name
+                        }
+                    })
+                    // console.log("CREATE_ROOM", {
+                    //     targetUserIDUnique,
+                    //     accessToken,
+                    //     userId,
+                    //     userExits,
+                    //     chatGroup,
+                    //     name
+                    // });
                 }
-
-
             } catch (error) {
                 cb({ status: "error", data: null, message: error.message || "Lỗi không xác định" })
             }

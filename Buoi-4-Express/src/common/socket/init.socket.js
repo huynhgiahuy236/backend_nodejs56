@@ -66,22 +66,21 @@ export const initSocket = (app) => {
                         })
                     }
                     //3.Nếu có rồi -> đi tiếp (kết nối tới room chat)
-                    else {
-
-                    }
+                    console.log("CREATE_ROOM", {
+                        targetUserIDUnique,
+                        accessToken,
+                        userId,
+                        userExits,
+                        chatGroup
+                    });
                 } else {
                     //tạo room chat nhóm
 
                 }
 
-                console.log("CREATE_ROOM", {
-                    targetUserIDUnique,
-                    accessToken,
-                    userId,
-                    userExits,
-                });
+
             } catch (error) {
-                cb({ error, data: null, message: error.message || "Lỗi không xác định" })
+                cb({ status: "error", data: null, message: error.message || "Lỗi không xác định" })
             }
         });
     });

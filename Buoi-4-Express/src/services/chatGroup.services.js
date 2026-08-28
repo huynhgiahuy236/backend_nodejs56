@@ -1,3 +1,4 @@
+import { buildQueryPrisma } from "../common/helpers/build-query-prisma.helper.js";
 import { prisma } from "../common/prisma/connect.prisma.js";
 
 export const chatGroupService = {
@@ -15,6 +16,13 @@ export const chatGroupService = {
             where: where,
             skip: index, //offset
             take: pageSize,// Limit
+            include: {
+                ChatGroupMembers: {
+                    include: {
+                        Users: true
+                    }
+                }
+            }
         })
         const totalItems = await prisma.chatGroups.count({
             where: where

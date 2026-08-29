@@ -1,76 +1,92 @@
 import { Injectable } from '@nestjs/common';
-import type { LoginDto } from './dto/login.dto.js';
+import { LoginDto } from './dto/login.dto';
+import { PrismaService } from 'src/modules-system/prisma/prisma.service';
 
 @Injectable()
 export class AuthService {
-  login(body: LoginDto) {
-    const { email, password } = req.body
-            // console.log(email)
-            // kiểm tra đăng ký chưa 
-            const userExit = await prisma.users.findUnique({
-                where: {
-                    email: email
-                },
-                omit: {
-                    password: false
-                }
-            })
-            // chưa -> yêu cầu đăng kí
-            if (!userExit) {
-                throw new BadRequestException("Tài khoản chưa được đăng ký");
-            }
-            // đã đăng ký -> xử lý đăng nhập
-            const isPassWordValid = bcrypt.compareSync(password, userExit.password)  // boolean
-            if (!isPassWordValid) {
-                throw new BadRequestException("Thông tin tài khoản không chính xác");
-            }
-            const accessToken = tokenService.createAccessToken(userExit.id)
-            // refreshToken dùng để làm mới do hết hạn lưu ở hai chỗ Localstore hoặc Cookies  
-            const refreshToken = tokenService.createRefreshToken(userExit.id);
+    constructor(private prisma: PrismaService){}
+  async login(body: LoginDto) {
+    const { email, password } = body;
+    //kiểm tra email đã được đăng ký chưa
+        const userExit = await this.prisma.users.findUnique({
+          where: {
+            email: email,
+          },
+          omit: {
+            password: false, // lấy cột password ra
+          },
+        });
+        //chưa -> yêu cầu đăng ký
+        if (!userExit) {
+          // throw new BadRequestException("Tài khoản không chính xác");
+          throw new BadRequestException(
+            "Email chưa được đăng ký. Vui lòng đăng ký tài khoản.",
+          );
+        }
     
-            return { accessToken: accessToken, refreshToken: refreshToken }
-        },
-        async getInfo(req) {
-            const user = await req.user
-            // console.log(user)
-            return user
-        },
-        async refreshToken(req) {
-            //thời hạn refreshtoken là 1 ngày
+        //đã đăng ký -> xử lý logic đăng nhập
+        const isPasswordValid = bcrypt.compareSync(password, userExit.password); //true
     
-            //nếu trả về 1 cặp token mới
-            //refreshToken sẽ luôn được làm mới, login của người dùng sẽ luôn duy trì
-            //nếu trong 1 ngày người dùng k sử dụng -> logout
+        if (!isPasswordValid) {
+          // throw new BadRequestException("Tài khoản không chính xác.");
+          throw new BadRequestException(
+            "Mật khẩu không chính xác. Vui lòng thử lại.",
+          );
+        }
     
-            // chỉ trả về accesstoken mới
-            //sau khi refreshtoken hết hạn, người dùng sẽ phải đăng nhập lại
-            const { accessToken, refreshToken } = req.cookies
-            if (!accessToken || !refreshToken) {
-                throw new BadRequestException("Vui long dang nhap de tiep tuc")
-            }
-            const decodeAccessToken = tokenService.verifyAccessToken(accessToken, {
-                ignoreExpiration: true
-            })
-            const decodeRefreshToken = tokenService.verifyRefreshToken(refreshToken)
+        const accessToken = tokenService.createAccessToken(userExit.id);
     
-            if (decodeAccessToken.userId !== decodeRefreshToken.userId) {
-                throw new UnauthorizedException("Token khong hop le")
-            }
-            const userExit = await prisma.users.findUnique({
-                where:{
-                    id: decodeAccessToken.userId
-                }
-            })
-            if(!userExit){
-                throw new UnauthorizedException("Nguoi dung khong ton tai")
-            }
+        const refreshToken = tokenService.createRefreshToken(userExit.id);
+        return { accessToken: accessToken, refreshToken: refreshToken };
+      ,
     
-            const newAccesToken = tokenService.createAccessToken(userExit.id)
-            
-            return {
-                accessToken: newAccesToken,
-                refreshToken: refreshToken
-            }
-    return 'login successful';
+      async getInfo(req) {
+        const user = req.user;
+        return user;
+      },
+    
+      async refreshToken(req) {
+        const { accessToken, refreshToken } = req.cookies;
+    
+        if (!accessToken || !refreshToken) {
+          throw new BadRequestException("Vui lòng đăng nhập để tiếp tục");
+        }
+    
+        const decodeAccessToken = tokenService.verifyAccessToken(accessToken, {
+          ignoreExpiration: true, //bỏ qua thời gian hết hạn
+        });
+    
+        const decodeRefreshToken = tokenService.verifyRefreshToken(refreshToken);
+    
+        if (decodeAccessToken.userId !== decodeRefreshToken.userId) {
+          throw new UnauthorizedException("Token không hợp lệ");
+        }
+    
+        const userExist = await this.prisma.users.findUnique({
+          where: {
+            id: decodeAccessToken.userId,
+          },
+        });
+        
+        if (!userExist) {
+          throw new UnauthorizedException("Người dùng không tồn tại");
+        }
+    
+        const newAccessToken = tokenService.createAccessToken(userExist.id);
+    
+        //thời hạn refreshtoken là 1 ngày
+    
+        //nếu trả về 1 cặp token mới
+        //refreshToken sẽ luôn được làm mới, login của người dùng sẽ luôn duy trì
+        //nếu trong 1 ngày người dùng k sử dụng -> logout
+    
+        // chỉ trả về accesstoken mới
+        //sau khi refreshtoken hết hạn, người dùng sẽ phải đăng nhập lại
+    
+        return {
+          accessToken: newAccessToken,
+          refreshToken: refreshToken,
+        };
+      }
   }
 }

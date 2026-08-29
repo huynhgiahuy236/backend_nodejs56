@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { PrismaService } from 'src/modules-system/prisma/prisma.service';
 import  * as bcrypt from 'bcrypt';
+import type { TokenService } from '../../module-system/token/token.service.js';
 @Injectable()
 export class AuthService {
-    constructor(private prisma: PrismaService){}
+    constructor(private prisma: PrismaService , private tokenService:TokenService){}
   async login(body: LoginDto) {
     const { email, password } = body;
     //kiểm tra email đã được đăng ký chưa
@@ -34,16 +35,16 @@ export class AuthService {
           );
         }
     
-        const accessToken = tokenService.createAccessToken(userExit.id);
+        const accessToken = this.tokenService.createAccessToken(userExit.id);
     
-        const refreshToken = tokenService.createRefreshToken(userExit.id);
+        const refreshToken = this.tokenService.createRefreshToken(userExit.id);
         return { accessToken: accessToken, refreshToken: refreshToken };
-      ,
+      }
     
       async getInfo(req) {
         const user = req.user;
         return user;
-      },
+      }
     
       async refreshToken(req) {
         const { accessToken, refreshToken } = req.cookies;
@@ -52,11 +53,11 @@ export class AuthService {
           throw new BadRequestException("Vui lòng đăng nhập để tiếp tục");
         }
     
-        const decodeAccessToken = tokenService.verifyAccessToken(accessToken, {
+        const decodeAccessToken = this.tokenService.verifyAccessToken(accessToken, {
           ignoreExpiration: true, //bỏ qua thời gian hết hạn
         });
     
-        const decodeRefreshToken = tokenService.verifyRefreshToken(refreshToken);
+        const decodeRefreshToken = this.tokenService.verifyRefreshToken(refreshToken);
     
         if (decodeAccessToken.userId !== decodeRefreshToken.userId) {
           throw new UnauthorizedException("Token không hợp lệ");
@@ -72,7 +73,7 @@ export class AuthService {
           throw new UnauthorizedException("Người dùng không tồn tại");
         }
     
-        const newAccessToken = tokenService.createAccessToken(userExist.id);
+        const newAccessToken = this.tokenService.createAccessToken(userExist.id);
     
         //thời hạn refreshtoken là 1 ngày
     
@@ -89,4 +90,4 @@ export class AuthService {
         };
       }
   }
-}
+

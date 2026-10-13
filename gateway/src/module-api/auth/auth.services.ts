@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { LoginDto } from './dto/login.dto';
-import { PrismaService } from 'src/modules-system/prisma/prisma.service';
+import { LoginDto } from './dto/login.dto.js';
 import  * as bcrypt from 'bcrypt';
-import type { TokenService } from '../../module-system/token/token.service.js';
+import  { TokenService } from '../../module-system/token/token.service.js';
+import { PrismaService } from '../../module-system/prisma/prisma.service.js';
 @Injectable()
 export class AuthService {
     constructor(private prisma: PrismaService , private tokenService:TokenService){}
@@ -26,7 +26,9 @@ export class AuthService {
         }
     
         //đã đăng ký -> xử lý logic đăng nhập
-        const isPasswordValid = bcrypt.compareSync(password, userExit.password); //true
+        const isPasswordValid =
+          userExit.password !== null &&
+          bcrypt.compareSync(password, userExit.password); //true
     
         if (!isPasswordValid) {
           // throw new BadRequestException("Tài khoản không chính xác.");
@@ -41,12 +43,12 @@ export class AuthService {
         return { accessToken: accessToken, refreshToken: refreshToken };
       }
     
-      async getInfo(req) {
+      async getInfo(req: { user: unknown }) {
         const user = req.user;
         return user;
       }
     
-      async refreshToken(req) {
+      async refreshToken(req: any) {
         const { accessToken, refreshToken } = req.cookies;
     
         if (!accessToken || !refreshToken) {

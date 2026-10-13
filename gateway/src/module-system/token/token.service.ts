@@ -1,10 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
-import { ACCESS_TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY } from 'src/common/constant/app.constant';
+import { ACCESS_TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY } from '../../common/constant/app.constant.js';
 
-@Injectable()
+type TokenPayload = jwt.JwtPayload & {
+  userId: number;
+};
+
+@Injectable() 
 export class TokenService {
-  createAccessToken(userID) {
+  createAccessToken(userID: number) {
     if (!userID) {
       throw new BadRequestException('Không có userID để tạo access token');
     }
@@ -16,7 +20,7 @@ export class TokenService {
     return accessToken;
   }
 
-  createRefreshToken(userID) {
+  createRefreshToken(userID: number) {
     if (!userID) {
       throw new BadRequestException('Không có userID để tạo refresh token');
     }
@@ -32,13 +36,37 @@ export class TokenService {
     return refreshToken;
   }
 
-  verifyAccessToken(accessToken, option) {
-    const decode = jwt.verify(accessToken, ACCESS_TOKEN_SECRET_KEY, option);
-    return decode;
+  verifyAccessToken(
+    accessToken: string,
+    options: jwt.VerifyOptions = {},
+  ): TokenPayload {
+    const decoded = jwt.verify(accessToken, ACCESS_TOKEN_SECRET_KEY, options);
+
+    if (
+      typeof decoded === 'string' ||
+      !('userId' in decoded) ||
+      typeof decoded.userId !== 'number'
+    ) {
+      throw new BadRequestException('Access token khong hop le');
+    }
+
+    return decoded as TokenPayload;
   }
 
-  verifyRefreshToken(refreshToken, option) {
-    const decode = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET_KEY, option);
-    return decode;
+  verifyRefreshToken(
+    refreshToken: string,
+    options: jwt.VerifyOptions = {},
+  ): TokenPayload {
+    const decoded = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET_KEY, options);
+
+    if (
+      typeof decoded === 'string' ||
+      !('userId' in decoded) ||
+      typeof decoded.userId !== 'number'
+    ) {
+      throw new BadRequestException('Refresh token khong hop le');
+    }
+
+    return decoded as TokenPayload;
   }
 }

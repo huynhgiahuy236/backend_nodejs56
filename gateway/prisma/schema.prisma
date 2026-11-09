@@ -7,23 +7,6 @@ datasource db {
   provider = "mysql"
 }
 
-model Articles {
-  id        Int       @id @default(autoincrement())
-  title     String?   @db.VarChar(255)
-  content   String?   @db.Text
-  imageUrl  String?   @db.VarChar(255)
-  views     Int       @default(0)
-  userId    Int?
-  deletedBy Int       @default(0)
-  isDeleted Boolean   @default(false)
-  deletedAt DateTime? @db.Timestamp(0)
-  createdAt DateTime  @default(now()) @db.Timestamp(0)
-  updatedAt DateTime  @default(now()) @db.Timestamp(0)
-  Users     Users?    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Articles_ibfk_1")
-
-  @@index([userId], map: "userId")
-}
-
 model ChatGroupMembers {
   id          Int         @id @default(autoincrement())
   userId      Int?
@@ -105,7 +88,7 @@ model Users {
   id               Int                @id @default(autoincrement())
   email            String             @unique(map: "email") @db.VarChar(255)
   fullName         String?            @db.VarChar(255)
-  avatar           String?            @db.Text
+  avartar          String?            @db.Text
   age              Int?
   totpSecret       String?            @db.VarChar(255)
   googleId         String?            @db.VarChar(255)
@@ -120,4 +103,21 @@ model Users {
   ChatGroups       ChatGroups[]
   ChatMessages     ChatMessages[]
   Orders           Orders[]
+}
+
+model Articles {
+  id        Int       @id @default(autoincrement())
+  title     String?   @db.VarChar(255)
+  Content   String?   @db.Text
+  imageURL  String?   @db.VarChar(255)
+  views     Int       @default(0)
+  userId    Int?
+  deletedBy Int       @default(0)
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
+  Users     Users?    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Articles_ibfk_1")
+
+  @@index([userId], map: "userId")
 }

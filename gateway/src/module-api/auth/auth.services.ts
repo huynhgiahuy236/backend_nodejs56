@@ -3,15 +3,59 @@ import { LoginDto } from './dto/login.dto.js';
 import  * as bcrypt from 'bcrypt';
 import  { TokenService } from '../../module-system/token/token.service.js';
 import { PrismaService } from '../../module-system/prisma/prisma.service.js';
+import { RegisterDto } from './dto/register.dto.js';
+import { Prisma } from '../../module-system/prisma/generated/prisma/client.js';
 @Injectable()
 export class AuthService {
     constructor(private prisma: PrismaService , private tokenService:TokenService){}
+
+  async register(body: RegisterDto) {
+    const email = body.email.trim().toLowerCase();
+    const existingUser = await this.prisma.users.findUnique({
+      where: { email },
+      select: { id: true },
+    });
+
+    if (existingUser) {
+      throw new BadRequestException('Email đã được đăng ký.');
+    }
+
+    const password = await bcrypt.hash(body.password, 10);
+
+    try {
+      const user = await this.prisma.users.create({
+        data: {
+          email,
+          password,
+          ...(body.fullName === undefined ? {} : { fullName: body.fullName }),
+        },
+        select: {
+          id: true,
+          email: true,
+          fullName: true,
+        },
+      });
+
+      return { message: 'Đăng ký thành công.', user };
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new BadRequestException('Email đã được đăng ký.');
+      }
+
+      throw error;
+    }
+  }
+
   async login(body: LoginDto) {
     const { email, password } = body;
+    const normalizedEmail = email.trim().toLowerCase();
     //kiểm tra email đã được đăng ký chưa
         const userExit = await this.prisma.users.findUnique({
           where: {
-            email: email,
+            email: normalizedEmail,
           },
           omit: {
             password: false, // lấy cột password ra
@@ -92,4 +136,3 @@ export class AuthService {
         };
       }
   }
-
